@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <form id="form">
+    <label>
+      Message:
+      <input type="text" name="message" autofocus>
+      <button type="submit">Send</button>
+    </label>
+  </form>
+
+  <ul id="list"></ul>
+  
+  <script>
+    const socket = new WebSocket("ws://localhost:8080")
+
+    socket.addEventListener("message", (event) => {
+      const node = document.createElement("li")
+      node.appendChild(document.createTextNode(event.data))
+      list.appendChild(node)
+    })
+
+    form.addEventListener("submit", event => {
+      event.preventDefault()
+      const form = new FormData(event.target)
+      const message = form.get("message")
+      socket.send(message);
+    })
+  </script>
+</body>
+
+</html>
